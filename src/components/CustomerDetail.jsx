@@ -64,100 +64,87 @@ export default function CustomerDetail({ customer, onBack, onEdit, onDelete, onU
         </div>
       </div>
 
-      <div className="detail-grid">
-        {/* Left: Family & Allergies */}
-        <div>
-          {/* Kitchen Info */}
-          <div className="card" style={{ marginBottom: '16px' }}>
-            <h4 className="section-title" style={{ fontSize: '1rem' }}><Flame size={18} color="var(--primary)" /> キッチン設備</h4>
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '8px' }}>
-              <span className="kitchen-badge"><Flame size={12} /> {c.kitchenType === 'gas' ? 'ガスコンロ' : c.kitchenType === 'ih' ? 'IH' : '両方'}</span>
-              <span className="kitchen-badge">{c.hasOven ? '🔥 オーブンあり' : '❌ オーブンなし'}</span>
-            </div>
-            {c.kitchenMemo && <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>{c.kitchenMemo}</p>}
-          </div>
-
-          {/* Family Members */}
-          <h4 className="section-title" style={{ fontSize: '1rem' }}>👨‍👩‍👧 家族構成・嗜好</h4>
-          <div className="family-grid">
-            {c.family.map((f, i) => (
-              <div key={f.id || i} className="card" style={{ padding: '16px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                  <strong style={{ fontSize: '0.95rem' }}>{f.name}</strong>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{f.relation} / {f.age}歳</div>
-                    {f.birthday && <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>🎂 {f.birthday}</div>}
-                  </div>
-                </div>
-                {f.allergies.length > 0 && (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '6px' }}>
-                    {f.allergies.map((a, j) => <span key={j} className="allergy-badge">⚠ {a}</span>)}
-                  </div>
-                )}
-                {f.tastePref && <div className="taste-badge" style={{ marginBottom: '4px' }}>🍽 {f.tastePref}</div>}
-                {f.memo && <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>📝 {f.memo}</p>}
-              </div>
-            ))}
-          </div>
-
-          {/* Events */}
-          {c.events && c.events.length > 0 && (
-            <div style={{ marginTop: '16px' }}>
-              <h4 className="section-title" style={{ fontSize: '1rem' }}><Calendar size={18} color="var(--accent)" /> 記念日・イベント</h4>
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                {c.events.map((ev, i) => (
-                  <span key={i} className="taste-badge">🎉 {ev.name}（{ev.date}）</span>
-                ))}
-              </div>
-            </div>
-          )}
+      {/* Memo History (formerly Menu History) */}
+      <div style={{ marginBottom: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+          <h4 className="section-title" style={{ margin: 0 }}>📋 メモ履歴</h4>
+          <button className="btn btn-primary btn-sm" onClick={() => { setEditingMenu(null); setShowMenuForm(true); }}>
+            <Plus size={14} /> 記録追加
+          </button>
         </div>
 
-        {/* Right: Menu History */}
-        <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-            <h4 className="section-title" style={{ margin: 0 }}>📋 提供メニュー履歴</h4>
-            <button className="btn btn-primary btn-sm" onClick={() => { setEditingMenu(null); setShowMenuForm(true); }}>
-              <Plus size={14} /> 記録追加
-            </button>
+        {(!c.menuHistory || c.menuHistory.length === 0) ? (
+          <div className="card" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '40px' }}>
+            まだメモ履歴の記録がありません
           </div>
-
-          {(!c.menuHistory || c.menuHistory.length === 0) ? (
-            <div className="card" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '40px' }}>
-              まだ提供メニューの記録がありません
-            </div>
-          ) : (
-            c.menuHistory.map((m, i) => (
-              <div key={m.id || i} className="menu-item">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div>
-                    <span className="date">{m.date}</span>
-                    <span className="genre">{m.genre}</span>
-                  </div>
-                  <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
-                    <div className="rating">
-                      {[1,2,3,4,5].map(s => (
-                        <Star key={s} size={14} fill={s <= m.rating ? '#F59E0B' : 'none'} color={s <= m.rating ? '#F59E0B' : '#D6D3D1'} />
-                      ))}
-                    </div>
-                    <button className="btn btn-secondary btn-sm" style={{ padding: '3px 6px', marginLeft: '6px' }} onClick={() => { setEditingMenu(m); setShowMenuForm(true); }}>
-                      <Edit2 size={11} />
-                    </button>
-                    <button className="btn btn-danger btn-sm" style={{ padding: '3px 6px' }} onClick={() => handleDeleteMenu(m.id)}>
-                      <Trash2 size={11} />
-                    </button>
-                  </div>
+        ) : (
+          c.menuHistory.map((m, i) => (
+            <div key={m.id || i} className="menu-item">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <span className="date">{m.date}</span>
+                  <span className="genre">{m.genre}</span>
                 </div>
-                <div className="dishes">
-                  {m.items.map((item, j) => (
-                    <span key={j} style={{ display: 'inline-block', marginRight: '6px', marginBottom: '2px' }}>• {item}</span>
-                  ))}
+                <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                  <div className="rating">
+                    {[1,2,3,4,5].map(s => (
+                      <Star key={s} size={14} fill={s <= m.rating ? '#F59E0B' : 'none'} color={s <= m.rating ? '#F59E0B' : '#D6D3D1'} />
+                    ))}
+                  </div>
+                  <button className="btn btn-secondary btn-sm" style={{ padding: '3px 6px', marginLeft: '6px' }} onClick={() => { setEditingMenu(m); setShowMenuForm(true); }}>
+                    <Edit2 size={11} />
+                  </button>
+                  <button className="btn btn-danger btn-sm" style={{ padding: '3px 6px' }} onClick={() => handleDeleteMenu(m.id)}>
+                    <Trash2 size={11} />
+                  </button>
                 </div>
-                {m.reaction && <div className="reaction">💬 {m.reaction}</div>}
-                {m.memo && <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '6px' }}>📝 {m.memo}</p>}
               </div>
-            ))
-          )}
+              <div className="dishes">
+                {m.items.map((item, j) => (
+                  <span key={j} style={{ display: 'inline-block', marginRight: '6px', marginBottom: '2px' }}>• {item}</span>
+                ))}
+              </div>
+              {m.reaction && <div className="reaction">💬 {m.reaction}</div>}
+              {m.memo && <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '6px' }}>📝 {m.memo}</p>}
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Events */}
+      {c.events && c.events.length > 0 && (
+        <div style={{ marginBottom: '24px' }}>
+          <h4 className="section-title" style={{ fontSize: '1rem' }}><Calendar size={18} color="var(--accent)" /> 記念日・イベント</h4>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {c.events.map((ev, i) => (
+              <span key={i} className="taste-badge">🎉 {ev.name}（{ev.date}）</span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Family Members (Bottom) */}
+      <div>
+        <h4 className="section-title" style={{ fontSize: '1rem' }}>👨‍👩‍👧 家族構成・嗜好</h4>
+        <div className="family-grid">
+          {c.family.map((f, i) => (
+            <div key={f.id || i} className="card" style={{ padding: '16px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                <strong style={{ fontSize: '0.95rem' }}>{f.name}</strong>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{f.relation} / {f.age}歳</div>
+                  {f.birthday && <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>🎂 {f.birthday}</div>}
+                </div>
+              </div>
+              {f.allergies.length > 0 && (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '6px' }}>
+                  {f.allergies.map((a, j) => <span key={j} className="allergy-badge">⚠ {a}</span>)}
+                </div>
+              )}
+              {f.tastePref && <div className="taste-badge" style={{ marginBottom: '4px' }}>🍽 {f.tastePref}</div>}
+              {f.memo && <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>📝 {f.memo}</p>}
+            </div>
+          ))}
         </div>
       </div>
 
