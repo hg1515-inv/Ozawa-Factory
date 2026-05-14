@@ -69,6 +69,19 @@ export default function CustomerDetail({ customer, onBack, onEdit, onDelete, onU
         </div>
       </div>
 
+      {/* Action Buttons */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '24px' }}>
+        <a href={c.phone ? `tel:${c.phone}` : '#'} className="action-button" style={{ background: '#7FB1E3' }}>
+          <span className="main">TEL</span><span className="sub">する</span>
+        </a>
+        <a href={c.line || '#'} target="_blank" rel="noopener noreferrer" className="action-button" style={{ background: '#38C138' }}>
+          <span className="main">LINE</span><span className="sub">する</span>
+        </a>
+        <a href={c.instagram || '#'} target="_blank" rel="noopener noreferrer" className="action-button" style={{ background: '#A85CBF' }}>
+          <span className="main">Instagram</span>
+        </a>
+      </div>
+
       {/* Memo History (formerly Menu History) */}
       <div style={{ marginBottom: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>

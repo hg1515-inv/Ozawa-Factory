@@ -651,6 +651,40 @@ select.form-control {
   font-size: 1.15rem;
 }
 
+/* ======== Action Buttons ======== */
+.action-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 10px;
+  border-radius: var(--radius-sm);
+  color: white;
+  text-decoration: none;
+  font-weight: 800;
+  transition: all var(--transition);
+  box-shadow: var(--shadow-sm);
+  gap: 4px;
+}
+
+.action-button:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  filter: brightness(1.05);
+}
+
+.action-button .main {
+  font-size: 1.8rem;
+  font-family: 'Outfit', sans-serif;
+  line-height: 1;
+}
+
+.action-button .sub {
+  font-size: 0.85rem;
+  align-self: flex-end;
+  margin-bottom: 4px;
+}
+
 /* ======== Breadcrumb / Back ======== */
 .back-btn {
   display: inline-flex;
