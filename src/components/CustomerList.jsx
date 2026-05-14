@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, AlertTriangle, MapPin, Flame } from 'lucide-react';
+import { Search, AlertTriangle, MapPin, Flame, Users } from 'lucide-react';
 
 export default function CustomerList({ customers, searchQuery, setSearchQuery, onSelect }) {
   const filtered = customers.filter(c => {

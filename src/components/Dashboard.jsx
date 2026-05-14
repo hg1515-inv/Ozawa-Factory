@@ -36,7 +36,7 @@ export default function Dashboard({ customers, onSelect }) {
       <div className="stats-row">
         <div className="stat-card">
           <div className="stat-value">{customers.length}</div>
-          <div className="stat-label">顧客数</div>
+          <div className="stat-label">友達の数</div>
         </div>
         <div className="stat-card">
           <div className="stat-value">{totalFamily}</div>
@@ -58,7 +58,7 @@ export default function Dashboard({ customers, onSelect }) {
           <h3 className="section-title"><Clock size={20} color="var(--primary)" /> ご機嫌伺いリスト</h3>
           {reminders.length === 0 ? (
             <div className="card" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '30px' }}>
-              ✅ 全顧客が1ヶ月以内に訪問済みです
+              ✅ 全員と1ヶ月以内に会っています
             </div>
           ) : (
             reminders.map(c => {
