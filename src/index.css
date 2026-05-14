@@ -482,7 +482,7 @@ select.form-control {
   padding: 14px 18px;
   background: var(--bg-card);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  margin-bottom: 12px;
+  margin-bottom: 4px;
 }
 
 .menu-item .date {
