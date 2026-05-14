@@ -84,7 +84,10 @@ export default function CustomerDetail({ customer, onBack, onEdit, onDelete, onU
               <div key={f.id || i} className="card" style={{ padding: '16px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
                   <strong style={{ fontSize: '0.95rem' }}>{f.name}</strong>
-                  <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{f.relation} / {f.age}歳</span>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{f.relation} / {f.age}歳</div>
+                    {f.birthday && <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>🎂 {f.birthday}</div>}
+                  </div>
                 </div>
                 {f.allergies.length > 0 && (
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '6px' }}>

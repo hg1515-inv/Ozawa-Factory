@@ -7,24 +7,25 @@ export default function Dashboard({ customers, onSelect }) {
   const totalAllergies = customers.reduce((sum, c) => sum + c.family.filter(f => f.allergies.length > 0).length, 0);
   const totalFamily = customers.reduce((sum, c) => sum + c.family.length, 0);
 
-  // Upcoming birthdays/events within 30 days
+  // Upcoming birthdays/events within 60 days
   const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const upcoming = [];
   customers.forEach(c => {
     (c.events || []).forEach(ev => {
       const [m, d] = ev.date.split('-').map(Number);
-      const evDate = new Date(now.getFullYear(), m - 1, d);
-      if (evDate < now) evDate.setFullYear(evDate.getFullYear() + 1);
-      const diff = (evDate - now) / (1000 * 60 * 60 * 24);
-      if (diff >= 0 && diff <= 30) upcoming.push({ ...ev, customerName: c.name, customerId: c.id, daysLeft: Math.ceil(diff) });
+      const evDate = new Date(today.getFullYear(), m - 1, d);
+      if (evDate < today) evDate.setFullYear(evDate.getFullYear() + 1);
+      const diff = Math.round((evDate - today) / (1000 * 60 * 60 * 24));
+      if (diff >= 0 && diff <= 60) upcoming.push({ ...ev, customerName: c.name, customerId: c.id, daysLeft: diff, displayDate: `${m}/${d}` });
     });
     (c.family || []).forEach(f => {
       if (f.birthday) {
         const [, m, d] = f.birthday.split('-').map(Number);
-        const bd = new Date(now.getFullYear(), m - 1, d);
-        if (bd < now) bd.setFullYear(bd.getFullYear() + 1);
-        const diff = (bd - now) / (1000 * 60 * 60 * 24);
-        if (diff >= 0 && diff <= 30) upcoming.push({ name: `${f.name}の誕生日`, customerName: c.name, customerId: c.id, daysLeft: Math.ceil(diff) });
+        const bd = new Date(today.getFullYear(), m - 1, d);
+        if (bd < today) bd.setFullYear(bd.getFullYear() + 1);
+        const diff = Math.round((bd - today) / (1000 * 60 * 60 * 24));
+        if (diff >= 0 && diff <= 60) upcoming.push({ name: `${f.name}の誕生日`, customerName: c.name, customerId: c.id, daysLeft: diff, displayDate: `${m}/${d}` });
       }
     });
   });
@@ -79,10 +80,10 @@ export default function Dashboard({ customers, onSelect }) {
 
         {/* Upcoming Events */}
         <div>
-          <h3 className="section-title"><Calendar size={20} color="var(--accent)" /> 今後のイベント（30日以内）</h3>
+          <h3 className="section-title"><Calendar size={20} color="var(--accent)" /> 今後のイベント（60日以内）</h3>
           {upcoming.length === 0 ? (
             <div className="card" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '30px' }}>
-              直近30日以内のイベントはありません
+              直近60日以内のイベントはありません
             </div>
           ) : (
             upcoming.map((ev, i) => (
@@ -90,7 +91,7 @@ export default function Dashboard({ customers, onSelect }) {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <div style={{ fontWeight: 700, fontSize: '0.92rem' }}>🎉 {ev.name}</div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>{ev.customerName}様</div>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>{ev.customerName}様 ({ev.displayDate})</div>
                   </div>
                   <span className="taste-badge">{ev.daysLeft === 0 ? '今日！' : `あと${ev.daysLeft}日`}</span>
                 </div>

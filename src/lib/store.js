@@ -191,22 +191,28 @@ export function getUpcomingEvents() {
   const customers = loadCustomers();
   const now = new Date();
   const results = [];
-  const currentMonthDay = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-  const nextMonth = new Date(now);
-  nextMonth.setMonth(nextMonth.getMonth() + 1);
-  const nextMonthDay = `${String(nextMonth.getMonth() + 1).padStart(2, '0')}-${String(nextMonth.getDate()).padStart(2, '0')}`;
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const sixtyDaysLater = new Date(today);
+  sixtyDaysLater.setDate(today.getDate() + 60);
 
   customers.forEach(c => {
     (c.events || []).forEach(ev => {
-      if (ev.date >= currentMonthDay && ev.date <= nextMonthDay) {
+      const [m, d] = ev.date.split('-').map(Number);
+      let evDate = new Date(today.getFullYear(), m - 1, d);
+      if (evDate < today) evDate.setFullYear(evDate.getFullYear() + 1);
+      
+      if (evDate <= sixtyDaysLater) {
         results.push({ ...ev, customerName: c.name, customerId: c.id });
       }
     });
     (c.family || []).forEach(f => {
       if (f.birthday) {
-        const bd = f.birthday.slice(5); // MM-DD
-        if (bd >= currentMonthDay && bd <= nextMonthDay) {
-          results.push({ name: `${f.name}の誕生日`, date: bd, customerName: c.name, customerId: c.id });
+        const [, m, d] = f.birthday.split('-').map(Number);
+        let bd = new Date(today.getFullYear(), m - 1, d);
+        if (bd < today) bd.setFullYear(bd.getFullYear() + 1);
+
+        if (bd <= sixtyDaysLater) {
+          results.push({ name: `${f.name}の誕生日`, date: f.birthday.slice(5), customerName: c.name, customerId: c.id });
         }
       }
     });
