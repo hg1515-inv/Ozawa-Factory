@@ -5,10 +5,10 @@ export default function CustomerList({ customers, searchQuery, setSearchQuery, o
   const filtered = customers.filter(c => {
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
-    // Search by name, address, station
+    // Search by name, address, nickname
     if (c.name.toLowerCase().includes(q)) return true;
     if (c.address.toLowerCase().includes(q)) return true;
-    if (c.nearestStation.toLowerCase().includes(q)) return true;
+    if ((c.nickname || '').toLowerCase().includes(q)) return true;
     // Search by allergy
     if (c.family.some(f => f.allergies.some(a => a.toLowerCase().includes(q)))) return true;
     // Search by taste pref
@@ -32,7 +32,7 @@ export default function CustomerList({ customers, searchQuery, setSearchQuery, o
       {filtered.length === 0 ? (
         <div className="empty-state">
           <Search size={48} />
-          <p>該当する顧客が見つかりません</p>
+          <p>該当する友達が見つかりません</p>
         </div>
       ) : (
         <div className="customer-grid">
@@ -43,27 +43,35 @@ export default function CustomerList({ customers, searchQuery, setSearchQuery, o
 
             return (
               <div key={c.id} className="card card-clickable" onClick={() => onSelect(c.id)}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
-                  <div>
-                    <h3 style={{ fontSize: '1.1rem', marginBottom: '2px' }}>{c.name}</h3>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <MapPin size={12} /> {c.nearestStation}
-                    </div>
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '12px' }}>
+                  {/* Avatar Thumbnail */}
+                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#FAFAF9', border: '1px solid #E7E5E4', overflow: 'hidden', flexShrink: 0 }}>
+                    {c.avatar ? (
+                      <img src={c.avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D6D3D1' }}>
+                        <Users size={20} />
+                      </div>
+                    )}
                   </div>
-                  <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                    <span className="kitchen-badge">
-                      <Flame size={12} /> {c.kitchenType === 'gas' ? 'ガス' : c.kitchenType === 'ih' ? 'IH' : '両方'}
-                    </span>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <h3 style={{ fontSize: '1rem', margin: 0 }}>{c.name}</h3>
+                      {c.nickname && <span style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 600 }}>({c.nickname})</span>}
+                    </div>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <MapPin size={10} /> {c.address}
+                    </div>
                   </div>
                 </div>
 
                 {/* Allergy Alert */}
                 {uniqueAllergies.length > 0 && (
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginBottom: '10px' }}>
-                    <AlertTriangle size={14} color="var(--danger)" style={{ marginTop: '2px' }} />
-                    {uniqueAllergies.map((a, i) => (
+                    {uniqueAllergies.slice(0, 3).map((a, i) => (
                       <span key={i} className="allergy-badge">⚠ {a}</span>
                     ))}
+                    {uniqueAllergies.length > 3 && <span style={{ fontSize: '0.7rem', color: 'var(--danger)' }}>他...</span>}
                   </div>
                 )}
 

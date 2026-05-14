@@ -80,7 +80,7 @@ export default function CustomerForm({ customer, onSave, onClose }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content wide" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>{isEdit ? '顧客情報を編集' : '新規顧客登録'}</h2>
+          <h2>{isEdit ? '友達の情報を編集' : '新しい友達を登録'}</h2>
           <button className="btn btn-secondary btn-icon" onClick={onClose}><X size={18} /></button>
         </div>
 

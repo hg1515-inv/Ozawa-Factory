@@ -59,11 +59,11 @@ export default function App() {
           <div className="logo-icon"><ChefHat size={26} color="white" /></div>
           <div>
             <h1>OzawaFactory</h1>
-            <span className="logo-sub">顧客管理システム</span>
+            <span className="logo-sub">友達管理システム</span>
           </div>
         </div>
         <div className="header-actions">
-          <button className="btn btn-primary" onClick={handleAdd}><Plus size={16} /> 新規登録</button>
+          <button className="btn btn-primary" onClick={handleAdd}><Plus size={16} /> 友達を追加</button>
         </div>
       </header>
 
@@ -72,7 +72,7 @@ export default function App() {
           <Home size={16} /> ダッシュボード
         </button>
         <button className={`nav-tab ${view === 'list' ? 'active' : ''}`} onClick={() => setView('list')}>
-          <Users size={16} /> 顧客一覧
+          <Users size={16} /> 友達一覧
         </button>
       </nav>
 
