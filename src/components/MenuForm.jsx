@@ -9,12 +9,10 @@ export default function MenuForm({ menu, onSave, onClose }) {
     genre: menu?.genre || '',
     reaction: menu?.reaction || '',
     rating: menu?.rating || 0,
-    photos: menu?.photos || [],
     memo: menu?.memo || '',
   });
   const [isRecording, setIsRecording] = useState(false);
   const recognitionRef = useRef(null);
-  const fileInputRef = useRef(null);
 
   const updateItem = (idx, val) => {
     const items = [...form.items];
@@ -56,20 +54,6 @@ export default function MenuForm({ menu, onSave, onClose }) {
     setIsRecording(true);
   };
 
-  // Photo upload
-  const handlePhoto = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      setForm(prev => ({ ...prev, photos: [...prev.photos, ev.target.result] }));
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const removePhoto = (idx) => {
-    setForm({ ...form, photos: form.photos.filter((_, i) => i !== idx) });
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -140,23 +124,6 @@ export default function MenuForm({ menu, onSave, onClose }) {
             <textarea className="form-control" rows="3" value={form.reaction} onChange={e => setForm({ ...form, reaction: e.target.value })} placeholder="お客様のリアクションを記録..." style={{ resize: 'vertical' }} />
           </div>
 
-          {/* Photos */}
-          <div className="form-group">
-            <label>料理写真</label>
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '8px' }}>
-              {form.photos.map((p, i) => (
-                <div key={i} style={{ position: 'relative' }}>
-                  <img src={p} alt="" className="photo-thumb" style={{ width: '80px', height: '80px' }} />
-                  <button type="button" onClick={() => removePhoto(i)} style={{ position: 'absolute', top: '-4px', right: '-4px', background: 'var(--danger)', color: 'white', border: 'none', borderRadius: '50%', width: '20px', height: '20px', cursor: 'pointer', fontSize: '0.7rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>×</button>
-                </div>
-              ))}
-              <button type="button" className="btn btn-secondary" style={{ width: '80px', height: '80px', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '0.7rem' }}
-                onClick={() => fileInputRef.current?.click()}>
-                <Camera size={20} />写真追加
-              </button>
-              <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handlePhoto} />
-            </div>
-          </div>
 
           {/* Memo with voice */}
           <div className="form-group">
