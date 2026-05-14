@@ -14,19 +14,6 @@ export default function MenuForm({ menu, onSave, onClose }) {
   const [isRecording, setIsRecording] = useState(false);
   const recognitionRef = useRef(null);
 
-  const updateItem = (idx, val) => {
-    const items = [...form.items];
-    items[idx] = val;
-    setForm({ ...form, items });
-  };
-
-  const addItem = () => setForm({ ...form, items: [...form.items, ''] });
-
-  const removeItem = (idx) => {
-    if (form.items.length <= 1) return;
-    setForm({ ...form, items: form.items.filter((_, i) => i !== idx) });
-  };
-
   // Voice input
   const toggleVoice = (field) => {
     if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
@@ -54,15 +41,11 @@ export default function MenuForm({ menu, onSave, onClose }) {
     setIsRecording(true);
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    const cleanItems = form.items.filter(i => i.trim());
-    if (cleanItems.length === 0) { alert('提供品目を1つ以上入力してください'); return; }
-    onSave({ ...form, items: cleanItems });
+    if (!form.memo.trim()) { alert('メモを入力してください'); return; }
+    onSave({ ...form, items: [] });
   };
-
-  const GENRES = ['和食', 'イタリアン', 'フレンチ', '中華', '韓国料理', 'エスニック', '創作料理', 'その他'];
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -73,67 +56,21 @@ export default function MenuForm({ menu, onSave, onClose }) {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
-            <div className="form-group">
-              <label>日付 *</label>
-              <input className="form-control" type="date" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} required />
-            </div>
-            <div className="form-group">
-              <label>ジャンル</label>
-              <select className="form-control" value={form.genre} onChange={e => setForm({ ...form, genre: e.target.value })}>
-                <option value="">選択</option>
-                {GENRES.map(g => <option key={g} value={g}>{g}</option>)}
-              </select>
-            </div>
-          </div>
-
-          {/* Menu Items */}
-          <div className="form-group">
-            <label>提供品目 *</label>
-            {form.items.map((item, idx) => (
-              <div key={idx} style={{ display: 'flex', gap: '6px', marginBottom: '6px' }}>
-                <input className="form-control" value={item} onChange={e => updateItem(idx, e.target.value)} placeholder={`品目 ${idx + 1}`} />
-                {form.items.length > 1 && (
-                  <button type="button" className="btn btn-danger btn-sm" style={{ padding: '6px' }} onClick={() => removeItem(idx)}><Trash2 size={14} /></button>
-                )}
-              </div>
-            ))}
-            <button type="button" className="btn btn-secondary btn-sm" onClick={addItem}><Plus size={12} /> 品目追加</button>
-          </div>
-
-          {/* Rating */}
-          <div className="form-group">
-            <label>評価</label>
-            <div className="rating" style={{ gap: '4px' }}>
-              {[1,2,3,4,5].map(s => (
-                <Star key={s} size={28} className="star" fill={s <= form.rating ? '#F59E0B' : 'none'} color={s <= form.rating ? '#F59E0B' : '#D6D3D1'}
-                  onClick={() => setForm({ ...form, rating: s === form.rating ? 0 : s })}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Reaction with voice */}
+          {/* Memo with voice (Top) */}
           <div className="form-group">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <label>リアクション・感想</label>
-              <button type="button" className={`voice-btn ${isRecording ? 'recording' : ''}`} onClick={() => toggleVoice('reaction')}>
-                {isRecording ? <><MicOff size={14} /> 停止</> : <><Mic size={14} /> 音声入力</>}
-              </button>
-            </div>
-            <textarea className="form-control" rows="3" value={form.reaction} onChange={e => setForm({ ...form, reaction: e.target.value })} placeholder="お客様のリアクションを記録..." style={{ resize: 'vertical' }} />
-          </div>
-
-
-          {/* Memo with voice */}
-          <div className="form-group">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <label>メモ</label>
+              <label>メモ *</label>
               <button type="button" className={`voice-btn ${isRecording ? 'recording' : ''}`} onClick={() => toggleVoice('memo')}>
                 {isRecording ? <><MicOff size={14} /> 停止</> : <><Mic size={14} /> 音声入力</>}
               </button>
             </div>
-            <textarea className="form-control" rows="2" value={form.memo} onChange={e => setForm({ ...form, memo: e.target.value })} placeholder="次回への申し送り..." style={{ resize: 'vertical' }} />
+            <textarea className="form-control" rows="5" value={form.memo} onChange={e => setForm({ ...form, memo: e.target.value })} placeholder="内容を入力..." style={{ resize: 'vertical' }} required />
+          </div>
+
+          {/* Date (Bottom) */}
+          <div className="form-group">
+            <label>日付 *</label>
+            <input className="form-control" type="date" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} required />
           </div>
 
           <div className="modal-footer">
