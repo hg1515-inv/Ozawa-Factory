@@ -13,6 +13,7 @@ export default function CustomerForm({ customer, onSave, onClose }) {
     phone: customer?.phone || '',
     line: customer?.line || '',
     instagram: customer?.instagram || '',
+    avatar: customer?.avatar || '',
     family: customer?.family || [{ id: generateId(), name: '', relation: '本人', age: '', birthday: '', allergies: [], tastePref: '', memo: '' }],
     events: customer?.events || [],
   });
@@ -85,24 +86,54 @@ export default function CustomerForm({ customer, onSave, onClose }) {
 
         <form onSubmit={handleSubmit}>
           {/* Basic Info */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
-            <div className="form-group">
-              <label>氏名 *</label>
-              <input className="form-control" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="例：田中 美咲" required />
+          <div style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
+            <div style={{ flexShrink: 0 }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.85rem', fontWeight: 600 }}>顔写真</label>
+              <div 
+                onClick={() => document.getElementById('avatar-upload').click()}
+                style={{
+                  width: '100px', height: '100px', borderRadius: '50%', border: '2px dashed #E7E5E4',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', cursor: 'pointer',
+                  background: form.avatar ? 'none' : '#FAFAF9', position: 'relative'
+                }}
+              >
+                {form.avatar ? (
+                  <img src={form.avatar} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  <Plus size={24} color="#D6D3D1" />
+                )}
+              </div>
+              <input 
+                id="avatar-upload" type="file" accept="image/*" style={{ display: 'none' }}
+                onChange={e => {
+                  const file = e.target.files[0];
+                  if (!file) return;
+                  const reader = new FileReader();
+                  reader.onload = (ev) => setForm({ ...form, avatar: ev.target.result });
+                  reader.readAsDataURL(file);
+                }}
+              />
             </div>
-            <div className="form-group">
-              <label>ニックネーム</label>
-              <input className="form-control" value={form.nickname} onChange={e => setForm({ ...form, nickname: e.target.value })} placeholder="例：みーちゃん" />
+            <div style={{ flex: 1 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
+                <div className="form-group">
+                  <label>氏名 *</label>
+                  <input className="form-control" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="例：田中 美咲" required />
+                </div>
+                <div className="form-group">
+                  <label>ニックネーム</label>
+                  <input className="form-control" value={form.nickname} onChange={e => setForm({ ...form, nickname: e.target.value })} placeholder="例：みーちゃん" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label>住所</label>
+                <input className="form-control" value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} placeholder="例：東京都世田谷区成城3-12-5" />
+              </div>
             </div>
-          </div>
-
-          <div className="form-group">
-            <label>住所</label>
-            <input className="form-control" value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} placeholder="例：東京都世田谷区成城3-12-5" />
           </div>
 
           {/* Contact Info */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '14px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '14px', marginBottom: '18px' }}>
             <div className="form-group">
               <label>電話番号</label>
               <input className="form-control" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder="090-0000-0000" />
