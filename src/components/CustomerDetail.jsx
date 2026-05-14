@@ -51,10 +51,15 @@ export default function CustomerDetail({ customer, onBack, onEdit, onDelete, onU
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <h2 style={{ fontSize: '1.6rem', marginBottom: '4px' }}>{c.name}</h2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
+            <h2 style={{ fontSize: '1.6rem', margin: 0 }}>{c.name}</h2>
+            {c.nickname && <span style={{ background: 'var(--primary-light)', color: 'var(--primary-dark)', padding: '2px 10px', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 700 }}>{c.nickname}</span>}
+          </div>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '0.88rem' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><MapPin size={14} /> {c.address}</span>
-            <span>🚉 {c.nearestStation}</span>
+            {c.phone && <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>📞 {c.phone}</span>}
+            {c.line && <a href={c.line} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#06C755', textDecoration: 'none', fontWeight: 600 }}>💬 LINE</a>}
+            {c.instagram && <a href={c.instagram} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#E1306C', textDecoration: 'none', fontWeight: 600 }}>📸 Instagram</a>}
           </div>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>

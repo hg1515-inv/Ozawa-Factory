@@ -9,11 +9,11 @@ const SAMPLE_DATA = [
   {
     id: generateId(),
     name: '田中 美咲',
+    nickname: 'みーちゃん',
     address: '東京都世田谷区成城3-12-5',
-    nearestStation: '成城学園前駅',
-    kitchenType: 'gas',
-    hasOven: true,
-    kitchenMemo: 'ガスコンロ3口。オーブンは電気式。作業スペース広め。',
+    phone: '090-1234-5678',
+    line: 'https://line.me/ti/p/example1',
+    instagram: 'https://instagram.com/misaki_tanaka',
     lastVisitDate: '2026-04-10',
     createdAt: '2026-01-15',
     family: [
@@ -51,11 +51,11 @@ const SAMPLE_DATA = [
   {
     id: generateId(),
     name: '佐藤 大輔',
+    nickname: 'だいちゃん',
     address: '東京都港区白金台4-8-12',
-    nearestStation: '白金台駅',
-    kitchenType: 'ih',
-    hasOven: false,
-    kitchenMemo: 'IH 2口。オーブンなし。電子レンジはあり。作業スペースやや狭い。',
+    phone: '080-9876-5432',
+    line: '',
+    instagram: 'https://instagram.com/daisuke_sato',
     lastVisitDate: '2026-03-20',
     createdAt: '2025-11-01',
     family: [
@@ -81,11 +81,11 @@ const SAMPLE_DATA = [
   {
     id: generateId(),
     name: '山本 ゆかり',
+    nickname: 'ゆかりさん',
     address: '神奈川県横浜市青葉区あざみ野2-1-8',
-    nearestStation: 'あざみ野駅',
-    kitchenType: 'gas',
-    hasOven: true,
-    kitchenMemo: 'ガスコンロ4口。ガスオーブンあり。業務用に近い設備。',
+    phone: '070-1122-3344',
+    line: 'https://line.me/ti/p/yukari',
+    instagram: '',
     lastVisitDate: '2026-05-01',
     createdAt: '2026-02-10',
     family: [

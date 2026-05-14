@@ -8,11 +8,11 @@ export default function CustomerForm({ customer, onSave, onClose }) {
   const isEdit = !!customer;
   const [form, setForm] = useState({
     name: customer?.name || '',
+    nickname: customer?.nickname || '',
     address: customer?.address || '',
-    nearestStation: customer?.nearestStation || '',
-    kitchenType: customer?.kitchenType || 'gas',
-    hasOven: customer?.hasOven ?? false,
-    kitchenMemo: customer?.kitchenMemo || '',
+    phone: customer?.phone || '',
+    line: customer?.line || '',
+    instagram: customer?.instagram || '',
     family: customer?.family || [{ id: generateId(), name: '', relation: '本人', age: '', birthday: '', allergies: [], tastePref: '', memo: '' }],
     events: customer?.events || [],
   });
@@ -91,8 +91,8 @@ export default function CustomerForm({ customer, onSave, onClose }) {
               <input className="form-control" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="例：田中 美咲" required />
             </div>
             <div className="form-group">
-              <label>最寄り駅</label>
-              <input className="form-control" value={form.nearestStation} onChange={e => setForm({ ...form, nearestStation: e.target.value })} placeholder="例：成城学園前駅" />
+              <label>ニックネーム</label>
+              <input className="form-control" value={form.nickname} onChange={e => setForm({ ...form, nickname: e.target.value })} placeholder="例：みーちゃん" />
             </div>
           </div>
 
@@ -101,26 +101,19 @@ export default function CustomerForm({ customer, onSave, onClose }) {
             <input className="form-control" value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} placeholder="例：東京都世田谷区成城3-12-5" />
           </div>
 
-          {/* Kitchen */}
+          {/* Contact Info */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '14px' }}>
             <div className="form-group">
-              <label>コンロタイプ</label>
-              <select className="form-control" value={form.kitchenType} onChange={e => setForm({ ...form, kitchenType: e.target.value })}>
-                <option value="gas">ガス</option>
-                <option value="ih">IH</option>
-                <option value="both">両方</option>
-              </select>
+              <label>電話番号</label>
+              <input className="form-control" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder="090-0000-0000" />
             </div>
             <div className="form-group">
-              <label>オーブン</label>
-              <select className="form-control" value={form.hasOven ? 'yes' : 'no'} onChange={e => setForm({ ...form, hasOven: e.target.value === 'yes' })}>
-                <option value="yes">あり</option>
-                <option value="no">なし</option>
-              </select>
+              <label>LINE (URL)</label>
+              <input className="form-control" value={form.line} onChange={e => setForm({ ...form, line: e.target.value })} placeholder="https://line.me/..." />
             </div>
             <div className="form-group">
-              <label>キッチンメモ</label>
-              <input className="form-control" value={form.kitchenMemo} onChange={e => setForm({ ...form, kitchenMemo: e.target.value })} placeholder="コンロ口数など" />
+              <label>Instagram (URL)</label>
+              <input className="form-control" value={form.instagram} onChange={e => setForm({ ...form, instagram: e.target.value })} placeholder="https://instagram.com/..." />
             </div>
           </div>
 
